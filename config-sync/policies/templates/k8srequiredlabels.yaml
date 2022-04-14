@@ -1,0 +1,45 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  annotations:
+    description: Requires resources to contain specified labels.
+  name: k8srequiredlabels
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredLabels
+      validation:
+        legacySchema: true
+        openAPIV3Schema:
+          properties:
+            labels:
+              description: A list of labels and values the object must specify.
+              items:
+                properties:
+                  key:
+                    description: The required label.
+                    type: string
+                type: object
+              type: array
+          type: object
+  targets:
+  - rego: |
+      package k8srequiredlabels
+      violation[{"msg": msg}] {
+        not input.review.object.kind == "Deployment"
+        provided := {label | input.review.object.metadata.labels[label]}
+        required := {label | label := input.parameters.labels[_].key}
+        missing := required - provided
+        count(missing) > 0
+        msg := sprintf("you must provide labels: %v", [missing])
+      }
+      violation[{"msg": msg}] {
+        input.review.object.kind == "Deployment"
+        provided := {label | input.review.object.spec.template.metadata.labels[label]}
+        required := {label | label := input.parameters.labels[_].key}
+        missing := required - provided
+        count(missing) > 0
+        msg := sprintf("you must provide labels: %v", [missing])
+      }
+    target: admission.k8s.gatekeeper.sh
