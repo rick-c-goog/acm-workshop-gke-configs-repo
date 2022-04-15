@@ -1,0 +1,13 @@
+apiVersion: configsync.gke.io/v1beta1
+kind: RepoSync
+metadata:
+  name: repo-sync
+  namespace: whereami
+spec:
+  sourceFormat: unstructured
+  git:
+    repo: https://github.com/rick-c-goog/acm-workshop-whereami-repo
+    revision: HEAD
+    branch: main
+    dir: staging
+    auth: none
