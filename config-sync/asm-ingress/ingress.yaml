@@ -7,6 +7,7 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: "gke-asm-ingressgateway"
     kubernetes.io/ingress.class: "gce"
     networking.gke.io/v1beta1.FrontendConfig: asm-ingressgateway
+    networking.gke.io/managed-certificates: whereami
 spec:
   defaultBackend:
     service:
