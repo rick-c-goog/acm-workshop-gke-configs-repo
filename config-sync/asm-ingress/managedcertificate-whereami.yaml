@@ -1,7 +1,0 @@
-apiVersion: networking.gke.io/v1
-kind: ManagedCertificate
-metadata:
-  name: whereami
-spec:
-  domains:
-    - "whereami.endpoints.acm-workshop-425-gke.cloud.goog"
