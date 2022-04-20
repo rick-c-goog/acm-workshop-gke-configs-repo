@@ -1,0 +1,8 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: onlineboutique
+  namespace: asm-ingress
+spec:
+  domains:
+    - "onlineboutique.endpoints.acm-workshop-425-gke.cloud.goog"
